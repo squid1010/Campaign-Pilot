@@ -4,7 +4,6 @@ import { FormEvent, useState } from 'react';
 import Link from 'next/link';
 import { ProfileSelector } from '../components/ProfileSelector';
 import { Suspense } from 'react';
-import { config, config } from 'process';
 
 type BrandProfile = {
   id: string;
@@ -559,5 +558,3 @@ export default function Generate() {
     </div>
   );
 }
-git config --global user.name "Sidney"
-git config --global user.email "sidney.mize@gmail.com"
