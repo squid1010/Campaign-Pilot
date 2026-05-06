@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "AiMarketing — AI Marketing Platform",
-  description: "A modern AI marketing landing page for campaigns, automation, and analytics.",
+  title: "Campaign Pilot — AI Marketing Platform",
+  description: "Generate creative, effective marketing campaigns in minutes with AI-powered tools for brainstorming ideas, drafting content, and building strategies.",
 };
 
 export default function RootLayout({

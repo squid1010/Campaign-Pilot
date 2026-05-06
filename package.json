@@ -2,6 +2,10 @@
   "name": "ai-marketing-app",
   "version": "0.1.0",
   "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/squid1010/Campaign-Pilot.git"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",

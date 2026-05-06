@@ -1,307 +1,133 @@
-'use client';
-
-import { FormEvent, useState } from 'react';
-
-const channelOptions = [
-  'Social media',
-  'Email marketing',
-  'Search ads',
-  'Landing page',
-  'SMS campaigns',
-];
-
-type MarketingResult = {
-  overview: string;
-  ideas: string[];
-  adCopy: string;
-  socialPost: string;
-  emailSubject: string;
-  emailBody: string;
-};
-
-const normalizeTone = (voice: string) => {
-  const normalized = voice.toLowerCase();
-  if (/friendly|warm|approachable|playful/.test(normalized)) return 'friendly and approachable';
-  if (/professional|confident|bold|authoritative/.test(normalized)) return 'professional and confident';
-  if (/luxury|premium|elegant|sophisticated/.test(normalized)) return 'luxurious and refined';
-  if (/fun|energetic|bold|vibrant/.test(normalized)) return 'energetic and bold';
-  return 'clear and compelling';
-};
-
-const chooseGoalFocus = (goals: string) => {
-  const lower = goals.toLowerCase();
-  if (/awareness|brand|reach|visibility/.test(lower)) return 'increase brand awareness and audience reach';
-  if (/sales|conversion|revenue|growth/.test(lower)) return 'drive conversions and boost sales';
-  if (/engagement|traffic|interaction/.test(lower)) return 'improve engagement and customer interaction';
-  return 'support your campaign goals with measurable results';
-};
-
-const buildPerformanceInsight = (successes: string, failures: string) => {
-  const wins = successes.trim() || 'strong creative performance and positive customer feedback';
-  const losses = failures.trim() || 'campaigns that underperformed because of weak calls to action or unclear audience fit';
-  return `We analyzed your past marketing performance, noting ${wins} while avoiding ${losses}. This helps shape a campaign that leans into what worked and sidesteps prior mistakes.`;
-};
-
-const generateMarketingResult = (
-  productName: string,
-  productDescription: string,
-  targetAudience: string,
-  brandVoice: string,
-  campaignGoals: string,
-  successes: string,
-  failures: string,
-  channels: string[],
-): MarketingResult => {
-  const productLabel = productName.trim() || 'your product';
-  const audienceLabel = targetAudience.trim() || 'your ideal customer';
-  const tone = normalizeTone(brandVoice);
-  const goalFocus = chooseGoalFocus(campaignGoals);
-  const insight = buildPerformanceInsight(successes, failures);
-  const selectedChannels = channels.length ? channels.join(', ') : 'social media and email marketing';
-
-  const ideas = [
-    `Create a ${tone} campaign that positions ${productLabel} as the solution for ${audienceLabel}.`,
-    `Use past success signals to highlight benefits, while testing a more direct call to action in ${selectedChannels}.`,
-    `Build a short-form social sequence that turns key product features into snackable content for modern buyers.`,
-  ];
-
-  const adCopy = `Discover ${productLabel}, designed for ${audienceLabel}. ${productDescription.trim() || 'A compelling product that stands out in a crowded market.'} With a ${tone} brand voice, this campaign aims to ${goalFocus}.`; 
-  const socialPost = `Ready for better results? ${productLabel} helps ${audienceLabel} achieve more by focusing on what matters most. ${campaignGoals.trim() || 'Get started today with smarter campaigns.'}`;
-  const emailSubject = `How ${productLabel} helps ${audienceLabel} achieve more`; 
-  const emailBody = `Hi there,
-
-We analyzed your past campaign performance and built a plan that leans into what worked while avoiding previous pitfalls. ${insight}
-
-Our recommendation is to promote ${productLabel} across ${selectedChannels}, using a ${tone} tone and messaging that speaks directly to ${audienceLabel}. The campaign should focus on ${goalFocus}.
-
-Best,
-The AiMarketing team`; 
-
-  return {
-    overview: `Based on your input for ${productLabel}, this campaign strategy combines product storytelling, audience targeting, and performance learnings to deliver a stronger marketing push.`,
-    ideas,
-    adCopy,
-    socialPost,
-    emailSubject,
-    emailBody,
-  };
-};
+import Link from 'next/link';
 
 export default function Home() {
-  const [productName, setProductName] = useState('');
-  const [productDescription, setProductDescription] = useState('');
-  const [targetAudience, setTargetAudience] = useState('');
-  const [brandVoice, setBrandVoice] = useState('');
-  const [campaignGoals, setCampaignGoals] = useState('');
-  const [successes, setSuccesses] = useState('');
-  const [failures, setFailures] = useState('');
-  const [selectedChannels, setSelectedChannels] = useState<string[]>(['Social media', 'Email marketing']);
-  const [result, setResult] = useState<MarketingResult | null>(null);
-
-  const toggleChannel = (channel: string) => {
-    setSelectedChannels((current) =>
-      current.includes(channel)
-        ? current.filter((item) => item !== channel)
-        : [...current, channel],
-    );
-  };
-
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const generated = generateMarketingResult(
-      productName,
-      productDescription,
-      targetAudience,
-      brandVoice,
-      campaignGoals,
-      successes,
-      failures,
-      selectedChannels,
-    );
-    setResult(generated);
-  };
-
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100">
-      <header className="mx-auto flex max-w-6xl flex-col gap-6 px-6 py-8 sm:flex-row sm:items-center sm:justify-between">
+      <header className="mx-auto flex max-w-6xl flex-col gap-8 px-6 py-6 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <p className="text-sm font-semibold uppercase tracking-[0.3em] text-cyan-300">AiMarketing</p>
-          <p className="mt-2 text-3xl font-semibold text-white">Marketing idea generator</p>
-          <p className="mt-3 max-w-2xl text-slate-400">
-            Enter your product and campaign details, share past performance insights, and get tailored campaign ideas plus content drafts instantly.
+          <p className="text-sm font-semibold uppercase tracking-[0.3em] text-cyan-300">
+            Campaign Pilot
           </p>
+          <p className="mt-1 text-2xl font-semibold text-white">Campaign Pilot</p>
         </div>
-        <a
-          href="#generator"
-          className="inline-flex items-center justify-center rounded-full bg-cyan-400 px-6 py-3 text-sm font-semibold text-slate-950 transition hover:bg-cyan-300"
-        >
-          Start now
-        </a>
+        <nav className="flex flex-wrap gap-4 text-sm text-slate-300">
+          <Link href="#how-it-works" className="transition hover:text-white">
+            How it works
+          </Link>
+          <Link href="/generate" className="transition hover:text-white">
+            Try it now
+          </Link>
+          <Link href="/profiles" className="transition hover:text-white">
+            Brand Profiles
+          </Link>
+          <Link href="/history" className="transition hover:text-white">
+            History
+          </Link>
+        </nav>
       </header>
 
       <main className="mx-auto max-w-6xl px-6 pb-20">
-        <section id="generator" className="grid gap-10 rounded-3xl border border-slate-800 bg-slate-900 p-10 shadow-2xl shadow-black/30 lg:grid-cols-[1fr_0.95fr]">
+        <section className="grid gap-10 rounded-3xl bg-gradient-to-r from-slate-900 via-slate-900 to-slate-800 p-10 shadow-2xl shadow-cyan-500/10 sm:grid-cols-[1.2fr_0.8fr] sm:items-center">
           <div className="space-y-6">
-            <div className="rounded-3xl bg-slate-950/80 p-6">
-              <p className="text-sm uppercase tracking-[0.3em] text-cyan-300">Campaign input</p>
-              <h2 className="mt-4 text-3xl font-semibold text-white">Tell us about your product, audience, and goals.</h2>
-              <p className="mt-3 text-slate-400">
-                The more details you provide, the more tailored the campaign ideas and drafts will be.
-              </p>
-            </div>
-            <form className="space-y-5" onSubmit={handleSubmit}>
-              <div className="grid gap-5 sm:grid-cols-2">
-                <label className="space-y-2 text-sm text-slate-300">
-                  Product name
-                  <input
-                    value={productName}
-                    onChange={(event) => setProductName(event.target.value)}
-                    className="w-full rounded-3xl border border-slate-800 bg-slate-950 px-4 py-3 text-slate-100 outline-none transition focus:border-cyan-400 focus:ring-2 focus:ring-cyan-500/20"
-                    placeholder="Example: Spark Social Scheduler"
-                  />
-                </label>
-                <label className="space-y-2 text-sm text-slate-300">
-                  Target audience
-                  <input
-                    value={targetAudience}
-                    onChange={(event) => setTargetAudience(event.target.value)}
-                    className="w-full rounded-3xl border border-slate-800 bg-slate-950 px-4 py-3 text-slate-100 outline-none transition focus:border-cyan-400 focus:ring-2 focus:ring-cyan-500/20"
-                    placeholder="Example: small business owners, ecommerce marketers"
-                  />
-                </label>
-              </div>
-
-              <label className="space-y-2 text-sm text-slate-300">
-                Product description
-                <textarea
-                  value={productDescription}
-                  onChange={(event) => setProductDescription(event.target.value)}
-                  rows={4}
-                  className="w-full rounded-3xl border border-slate-800 bg-slate-950 px-4 py-3 text-slate-100 outline-none transition focus:border-cyan-400 focus:ring-2 focus:ring-cyan-500/20"
-                  placeholder="Describe what makes your product unique, key benefits, and offer details."
-                />
-              </label>
-
-              <label className="space-y-2 text-sm text-slate-300">
-                Brand voice
-                <input
-                  value={brandVoice}
-                  onChange={(event) => setBrandVoice(event.target.value)}
-                  className="w-full rounded-3xl border border-slate-800 bg-slate-950 px-4 py-3 text-slate-100 outline-none transition focus:border-cyan-400 focus:ring-2 focus:ring-cyan-500/20"
-                  placeholder="Example: confident, warm, modern, expert"
-                />
-              </label>
-
-              <label className="space-y-2 text-sm text-slate-300">
-                Campaign goals
-                <textarea
-                  value={campaignGoals}
-                  onChange={(event) => setCampaignGoals(event.target.value)}
-                  rows={3}
-                  className="w-full rounded-3xl border border-slate-800 bg-slate-950 px-4 py-3 text-slate-100 outline-none transition focus:border-cyan-400 focus:ring-2 focus:ring-cyan-500/20"
-                  placeholder="Example: increase sales, boost signups, launch a new product"
-                />
-              </label>
-
-              <label className="space-y-2 text-sm text-slate-300">
-                Past campaign successes
-                <textarea
-                  value={successes}
-                  onChange={(event) => setSuccesses(event.target.value)}
-                  rows={3}
-                  className="w-full rounded-3xl border border-slate-800 bg-slate-950 px-4 py-3 text-slate-100 outline-none transition focus:border-cyan-400 focus:ring-2 focus:ring-cyan-500/20"
-                  placeholder="Example: high click-through rate on email, a viral social post, strong conversion from influencer ads"
-                />
-              </label>
-
-              <label className="space-y-2 text-sm text-slate-300">
-                Past campaign failures
-                <textarea
-                  value={failures}
-                  onChange={(event) => setFailures(event.target.value)}
-                  rows={3}
-                  className="w-full rounded-3xl border border-slate-800 bg-slate-950 px-4 py-3 text-slate-100 outline-none transition focus:border-cyan-400 focus:ring-2 focus:ring-cyan-500/20"
-                  placeholder="Example: low engagement, poor audience fit, weak messaging"
-                />
-              </label>
-
-              <div className="rounded-3xl border border-slate-800 bg-slate-950 p-5">
-                <p className="text-sm font-semibold uppercase tracking-[0.3em] text-cyan-300">Preferred channels</p>
-                <div className="mt-4 grid gap-3 sm:grid-cols-2">
-                  {channelOptions.map((channel) => (
-                    <button
-                      key={channel}
-                      type="button"
-                      onClick={() => toggleChannel(channel)}
-                      className={`rounded-3xl border px-4 py-3 text-left text-sm transition ${
-                        selectedChannels.includes(channel)
-                          ? 'border-cyan-400 bg-cyan-500/10 text-white'
-                          : 'border-slate-800 bg-slate-950 text-slate-300 hover:border-slate-600'
-                      }`}
-                    >
-                      {channel}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              <button
-                type="submit"
-                className="inline-flex w-full items-center justify-center rounded-3xl bg-cyan-400 px-6 py-4 text-sm font-semibold text-slate-950 transition hover:bg-cyan-300"
+            <span className="inline-flex rounded-full bg-cyan-500/10 px-4 py-2 text-sm font-semibold text-cyan-200">
+              AI-powered marketing campaigns
+            </span>
+            <h1 className="max-w-2xl text-4xl font-semibold tracking-tight text-white sm:text-5xl">
+              Campaign Pilot
+            </h1>
+            <p className="max-w-xl text-lg leading-8 text-slate-300">
+              Campaign Pilot helps you generate creative, effective marketing campaigns in minutes. Whether you&apos;re a small business owner or a marketing professional, our AI-powered tool makes it easier to brainstorm ideas, draft content, and build strategies that work.
+            </p>
+            <div className="flex flex-col gap-4 sm:flex-row">
+              <Link
+                href="/generate"
+                className="inline-flex items-center justify-center rounded-full bg-cyan-400 px-6 py-3 text-sm font-semibold text-slate-950 transition hover:bg-cyan-300"
               >
-                Generate marketing ideas
-              </button>
-            </form>
+                Try it now
+              </Link>
+              <Link
+                href="#how-it-works"
+                className="inline-flex items-center justify-center rounded-full border border-slate-700 bg-slate-950/70 px-6 py-3 text-sm font-semibold text-slate-100 transition hover:border-cyan-400 hover:text-cyan-200"
+              >
+                See how it works
+              </Link>
+            </div>
           </div>
-
-          <div className="space-y-6 rounded-3xl border border-slate-800 bg-slate-950/90 p-8 shadow-xl shadow-black/20">
+          <div className="rounded-[2rem] border border-slate-800 bg-slate-950/80 p-8 shadow-xl shadow-black/20">
             <div className="rounded-3xl bg-slate-900 p-6">
-              <p className="text-sm uppercase tracking-[0.3em] text-cyan-300">Generated output</p>
-              <p className="mt-3 text-slate-400">
-                Receive campaign ideas, ad copy, social posts, and a draft email using your product details and past performance lessons.
+              <p className="text-sm uppercase tracking-[0.25em] text-cyan-300">
+                Campaign analytics
+              </p>
+              <div className="mt-6 space-y-4">
+                <div className="rounded-3xl bg-slate-950/60 p-5">
+                  <p className="text-sm text-slate-400">Conversion uplift</p>
+                  <p className="mt-2 text-3xl font-semibold text-white">+32%</p>
+                </div>
+                <div className="rounded-3xl bg-slate-950/60 p-5">
+                  <p className="text-sm text-slate-400">Customer reach</p>
+                  <p className="mt-2 text-3xl font-semibold text-white">1.2M</p>
+                </div>
+                <div className="rounded-3xl bg-slate-950/60 p-5">
+                  <p className="text-sm text-slate-400">Automated workflows</p>
+                  <p className="mt-2 text-3xl font-semibold text-white">72+</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="how-it-works" className="mt-16 rounded-3xl border border-slate-800 bg-slate-900 p-10 shadow-2xl shadow-black/20">
+          <div className="grid gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:items-center">
+            <div className="space-y-6">
+              <p className="text-sm font-semibold uppercase tracking-[0.3em] text-cyan-300">
+                How it works
+              </p>
+              <h2 className="text-3xl font-semibold text-white sm:text-4xl">
+                From campaign concept to conversion, all steps are automated.
+              </h2>
+              <p className="max-w-xl text-slate-400">
+                Plan, launch, and optimize campaigns with a single platform that understands your audience, your offers, and what converts.
               </p>
             </div>
-
-            {result ? (
-              <div className="space-y-6">
-                <div className="rounded-3xl border border-slate-800 bg-slate-900 p-6">
-                  <p className="text-sm font-semibold uppercase tracking-[0.3em] text-cyan-300">Overview</p>
-                  <p className="mt-4 text-slate-200">{result.overview}</p>
-                </div>
-
-                <div className="grid gap-4 sm:grid-cols-2">
-                  {result.ideas.map((idea, index) => (
-                    <div key={index} className="rounded-3xl border border-slate-800 bg-slate-900 p-6">
-                      <p className="text-sm font-semibold uppercase tracking-[0.3em] text-cyan-300">Idea {index + 1}</p>
-                      <p className="mt-3 text-slate-200">{idea}</p>
+            <div className="space-y-4">
+              {[
+                {
+                  step: "1",
+                  title: "Define goals",
+                  detail: "Choose your objective, audience, and channels in one intuitive workspace.",
+                },
+                {
+                  step: "2",
+                  title: "Build campaigns",
+                  detail: "Let AI generate assets, suggestions, and templates tailored to your brand.",
+                },
+                {
+                  step: "3",
+                  title: "Optimize continually",
+                  detail: "Track performance in real time and let automation optimize budgets and creatives.",
+                },
+              ].map((item) => (
+                <div key={item.step} className="rounded-3xl border border-slate-800 bg-slate-950/60 p-6">
+                  <div className="flex items-center gap-4">
+                    <div className="flex h-11 w-11 items-center justify-center rounded-full bg-cyan-500 text-sm font-semibold text-slate-950">
+                      {item.step}
                     </div>
-                  ))}
+                    <h3 className="text-xl font-semibold text-white">{item.title}</h3>
+                  </div>
+                  <p className="mt-3 text-slate-400">{item.detail}</p>
                 </div>
-
-                <div className="space-y-4">
-                  <div className="rounded-3xl border border-slate-800 bg-slate-900 p-6">
-                    <p className="text-sm font-semibold uppercase tracking-[0.3em] text-cyan-300">Ad copy</p>
-                    <p className="mt-3 text-slate-200">{result.adCopy}</p>
-                  </div>
-                  <div className="rounded-3xl border border-slate-800 bg-slate-900 p-6">
-                    <p className="text-sm font-semibold uppercase tracking-[0.3em] text-cyan-300">Social post</p>
-                    <p className="mt-3 text-slate-200">{result.socialPost}</p>
-                  </div>
-                  <div className="rounded-3xl border border-slate-800 bg-slate-900 p-6">
-                    <p className="text-sm font-semibold uppercase tracking-[0.3em] text-cyan-300">Email draft</p>
-                    <p className="mt-3 text-slate-200 font-semibold">Subject: {result.emailSubject}</p>
-                    <p className="mt-3 whitespace-pre-line text-slate-300">{result.emailBody}</p>
-                  </div>
-                </div>
-              </div>
-            ) : (
-              <div className="rounded-3xl border border-slate-800 bg-slate-900 p-6 text-slate-400">
-                Fill out the campaign form and click “Generate marketing ideas” to see tailored suggestions.
-              </div>
-            )}
+              ))}
+            </div>
           </div>
         </section>
       </main>
+
+      <footer className="border-t border-slate-800 bg-slate-950/90 py-8 text-slate-500">
+        <div className="mx-auto flex max-w-6xl flex-col gap-4 px-6 text-sm sm:flex-row sm:items-center sm:justify-between">
+          <p>© 2026 Campaign Pilot. Built for data-driven marketing teams.</p>
+          <p>Privacy · Terms · Support</p>
+        </div>
+      </footer>
     </div>
   );
 }

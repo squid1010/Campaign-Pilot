@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Profile Setup</title>
+</head>
+<body>
+    <h1>Test Profile Setup</h1>
+    <button onclick="addTestProfile()">Add Test Profile</button>
+    <button onclick="clearProfiles()">Clear Profiles</button>
+    <div id="status"></div>
+
+    <script>
+        function addTestProfile() {
+            const testProfile = {
+                id: 'test-profile-1',
+                name: 'Test Luxury Brand',
+                description: 'A premium fashion brand',
+                values: 'Quality, Sustainability, Innovation',
+                personality: 'Elegant, Sophisticated, Modern',
+                targetAudience: 'Affluent professionals aged 30-50',
+                brandColors: '#000000, #FFFFFF, #FFD700',
+                story: 'Founded in 2020, we create timeless pieces for the modern wardrobe.',
+                tone: 'luxury',
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString(),
+            };
+
+            // Add test profile to localStorage
+            localStorage.setItem('brandProfiles', JSON.stringify([testProfile]));
+
+            document.getElementById('status').innerHTML = 'Test profile added! <a href="/generate" target="_blank">Go to Generate Page</a>';
+            console.log('Test profile added:', testProfile);
+        }
+
+        function clearProfiles() {
+            localStorage.removeItem('brandProfiles');
+            document.getElementById('status').innerHTML = 'Profiles cleared!';
+            console.log('Profiles cleared');
+        }
+    </script>
+</body>
+</html>
